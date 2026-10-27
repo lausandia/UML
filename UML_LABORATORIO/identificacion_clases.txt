@@ -1,0 +1,212 @@
+PROYECTO: LABORATORIO DE PRESTAMO DE EQUIPOS
+
+Programacion Orientada a Objetos
+I.U. Pascual Bravo
+Sara Rios Velez - Laura Piedrahita
+
+1. IDENTIFICACION DE CLASES Y ATRIBUTOS
+
+Persona (clase abstracta)
+Atributos:
+- documento: String
+- nombre: String
+
+Estudiante
+Atributos:
+- programaAcademico: String
+
+Docente
+Atributos:
+- dependencia: String
+
+Equipo (clase abstracta)
+Atributos:
+- codigo: String
+- marca: String
+- disponible: boolean
+
+Portatil
+Atributos:
+- memoriaRAM: int
+
+Proyector
+Atributos:
+- lumenes: int
+
+Tablet
+No tiene atributos extras especificados en el enunciado
+
+Cargador
+Atributos:
+- serial: String
+- vatios: int
+
+Prestamo
+Atributos:
+- numero: int
+- persona: Persona
+- equipos: List<Equipo>
+
+
+2. METODOS PRINCIPALES
+
+Estudiante:
+- getDiasMaximos(): int
+- getMaximoEquipos(): int
+
+Docente:
+- getDiasMaximos(): int
+- getMaximoEquipos(): int
+
+Equipo:
+- getMultaDiaria(): double
+
+Prestamo:
+- calcularDiasRetraso(diasUsados: int): int
+- calcularMulta(diasRetraso: int): double
+
+ReglaMulta (interfaz):
+- calcularMulta(equipos: List<Equipo>, diasRetraso: int): double
+
+RepositorioPrestamos (interfaz):
+- guardar(prestamo: Prestamo): void
+
+ServicioAvisos (interfaz):
+- notificar(persona: Persona, mensaje: String): void
+
+ServicioPrestamos:
+- prestar(persona: Persona, equipo: Equipo): Prestamo
+- prestar(persona: Persona, equipos: List<Equipo>): Prestamo
+- devolver(prestamo: Prestamo, diasUsados: int): double
+
+ReporteInventario:
+- mostrarInventario(equipos: List<Equipo>): void
+
+
+3. RELACIONES ENTRE LAS CLASES
+
+Herencia:
+- Estudiante hereda de Persona.
+- Docente hereda de Persona.
+- Portatil hereda de Equipo.
+- Proyector hereda de Equipo.
+- Tablet hereda de Equipo.
+
+Composicion:
+- Portatil contiene un Cargador que se crea junto con el portatil
+
+Agregacion:
+- Prestamo incluye uno o varios equipos que existen antes del prestamo y siguen existiendo despues
+
+Asociacion:
+- Cada Prestamo pertenece a una Persona
+
+Interfaces:
+- ServicioPrestamos utiliza ReglaMulta para calcular las multas
+- ServicioPrestamos utiliza RepositorioPrestamos para guardar los prestamos
+- ServicioPrestamos utiliza ServicioAvisos para enviar notificaciones.
+
+
+4. REGLAS DEL PRESTAMO
+
+Estudiante:
+- Puede prestar equipos durante un maximo de 3 dias.
+- Puede tener un maximo de 1 equipo prestado a la vez.
+
+Docente:
+- Puede prestar equipos durante un maximo de 10 dias.
+- Puede tener un maximo de 3 equipos prestados a la vez.
+
+Disponibilidad:
+- No se puede prestar un equipo que no este disponible.
+- El estado del equipo solo puede cambiarlo el sistema al prestar o recibir el equipo.
+
+Prestamos:
+- Cada prestamo tiene un numero consecutivo automatico.
+- Cada prestamo pertenece a una persona e incluye uno o varios equipos.
+- No se permite realizar un prestamo sin equipos.
+- Se puede prestar un solo equipo o una lista de equipos.
+
+Devoluciones:
+- Al devolver se indican los dias usados.
+- El retraso se calcula restando los dias maximos permitidos a los dias usados.
+- Si no hay retraso, los dias de retraso son cero.
+
+Multas por dia de retraso:
+- Portatil: $15.000.
+- Proyector: $20.000.
+- Tablet: $8.000.
+
+Reglas de multas:
+- La multa estandar suma la multa diaria de cada equipo por los dias de retraso.
+- En semana universitaria se cobra la mitad de la multa estandar.
+- Se deben poder agregar nuevas reglas de multa sin modificar la clase que administra los prestamos.
+
+Almacenamiento y avisos:
+- Los prestamos se guardan en memoria por ahora.
+- El sistema envia un aviso a la persona al prestar y devolver equipos.
+- Los avisos se muestran por consola.
+
+Inventario:
+- El reporte debe mostrar todos los equipos y su estado.
+- Se deben recorrer todos los equipos con un solo ciclo.
+
+
+5. CONCEPTOS DE PROGRAMACION ORIENTADA A OBJETOS
+
+Encapsulamiento:
+Los atributos deben estar protegidos mediante modificadores de acceso y el estado de disponibilidad no debe cambiarse desde afuera.
+
+Constructores:
+Se deben utilizar constructores para crear los objetos.
+
+Herencia:
+Se utiliza para representar los tipos de personas y los tipos de equipos.
+
+Sobrecarga:
+Se permite prestar un equipo o una lista de equipos mediante metodos con el mismo nombre y diferentes parametros.
+
+Sobreescritura:
+Las clases hijas redefinen los metodos correspondientes.
+
+Composicion:
+El portatil contiene un cargador que se crea junto con el.
+
+Agregacion:
+El prestamo incluye equipos que existen independientemente.
+
+Clases abstractas:
+Persona y Equipo son clases abstractas.
+
+Interfaces:
+Se utilizan interfaces para las reglas de multa, el almacenamiento y los avisos.
+
+Polimorfismo:
+Se utiliza para calcular las multas y recorrer los equipos sin preguntar directamente su tipo.
+
+Principios SOLID:
+Cada clase debe tener una responsabilidad clara y las reglas de multa deben poder ampliarse sin modificar el servicio de prestamos.
+
+
+6. RESTRICCIONES DEL PROYECTO
+
+- No se permite utilizar instanceof para decidir los dias, los limites o las multas.
+- No se permite utilizar condicionales if segun el tipo de persona o equipo para decidir los dias maximos, los limites o las multas.
+
+
+7. ESCENARIO DE PRUEBA
+
+- Crear dos portatiles, un proyector y una tablet.
+- Crear una estudiante y un docente.
+- La estudiante presta un portatil.
+- El docente presta el proyector y la tablet.
+- Intentar que la estudiante preste otro portatil y que el docente preste el portatil ocupado.
+- Mostrar el inventario.
+- La estudiante devuelve el portatil despues de 5 dias.
+- El docente devuelve sus equipos despues de 8 dias.
+- Crear otro servicio con la regla de multa de semana universitaria.
+- Repetir un prestamo con devolucion tardia.
+- Mostrar el total de multas y el inventario final.
+
+
+Nota: Este documento corresponde al analisis inicial y al primer borrador UML del proyecto. La implementacion de las clases Java se desarrollara en los siguientes avances.

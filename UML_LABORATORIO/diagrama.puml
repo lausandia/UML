@@ -1,0 +1,92 @@
+
+' Generado con IA
+@startuml
+title Laboratorio de prestamo de equipos
+
+abstract class Persona {
+  - documento: String
+  - nombre: String
+}
+
+class Estudiante {
+  - programaAcademico: String
+  + getDiasMaximos(): int
+  + getMaximoEquipos(): int
+}
+
+class Docente {
+  - dependencia: String
+  + getDiasMaximos(): int
+  + getMaximoEquipos(): int
+}
+
+abstract class Equipo {
+  - codigo: String
+  - marca: String
+  - disponible: boolean
+  + getMultaDiaria(): double
+}
+
+class Portatil {
+  - memoriaRAM: int
+}
+
+class Proyector {
+  - lumenes: int
+}
+
+class Tablet
+
+class Cargador {
+  - serial: String
+  - vatios: int
+}
+
+class Prestamo {
+  - numero: int
+  - persona: Persona
+  - equipos: List<Equipo>
+  + calcularDiasRetraso(diasUsados: int): int
+  + calcularMulta(diasRetraso: int): double
+}
+
+interface ReglaMulta {
+  + calcularMulta(equipos: List<Equipo>, diasRetraso: int): double
+}
+
+interface RepositorioPrestamos {
+  + guardar(prestamo: Prestamo): void
+}
+
+interface ServicioAvisos {
+  + notificar(persona: Persona, mensaje: String): void
+}
+
+class ServicioPrestamos {
+  + prestar(persona: Persona, equipo: Equipo): Prestamo
+  + prestar(persona: Persona, equipos: List<Equipo>): Prestamo
+  + devolver(prestamo: Prestamo, diasUsados: int): double
+}
+
+class ReporteInventario {
+  + mostrarInventario(equipos: List<Equipo>): void
+}
+
+Persona <|-- Estudiante
+Persona <|-- Docente
+
+Equipo <|-- Portatil
+Equipo <|-- Proyector
+Equipo <|-- Tablet
+
+Portatil *-- Cargador
+Prestamo o-- "1..*" Equipo
+Prestamo --> Persona
+
+ServicioPrestamos --> ReglaMulta
+ServicioPrestamos --> RepositorioPrestamos
+ServicioPrestamos --> ServicioAvisos
+
+ReporteInventario --> Equipo
+
+@enduml
